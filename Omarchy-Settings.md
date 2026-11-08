@@ -22,17 +22,17 @@ Written against Omarchy 4.5.0-3 and Hyprland 0.56.2, which use Lua config (`~/.c
 4. Run `omarchy version` first. If Hyprland config here isn't Lua, stop and ask me before translating anything.
 5. Run `omarchy menu keybindings --print` first. If a key under "New keys" below is already taken by something I added on this computer, ask me before replacing it.
 6. Don't run anything from the CybexOS repo. It's NixOS-based, and its `cybexos-*` commands don't exist on Omarchy.
-7. Files ending in `.append` or `.append.lua` get added to the end of the target file. First check whether their block is already there, so nothing is added twice. Don't overwrite personal settings already in those files.
+7. Files ending in `.append`, `.append.lua` or `.append.fish` get added to the end of the target file. First check whether their block is already there, so nothing is added twice. Don't overwrite personal settings already in those files.
 
 ## Step 1: Install packages
 
-Install `lazydocker` and `git-delta`. Do this before Step 5, because git fails on every paged command if `core.pager` points at a missing `delta`.
+Install `lazydocker`, `git-delta` and `fish`. Do this before Step 5, because git fails on every paged command if `core.pager` points at a missing `delta`, and the login shell can't change until fish is installed.
 
 ```bash
-omarchy pkg add lazydocker git-delta
+omarchy pkg add lazydocker git-delta fish
 ```
 
-If no terminal is available for a password, use `pkexec pacman -S --needed --noconfirm lazydocker git-delta`.
+If no terminal is available for a password, use `pkexec pacman -S --needed --noconfirm lazydocker git-delta fish`.
 
 ## Step 2: Keybindings
 
@@ -90,15 +90,34 @@ Append to `~/.config/hypr/looknfeel.lua`. This covers no focus stealing, 16 px r
 
 **File:** `files/shell-indicators.items.json`
 
-**Shell aliases** (`~/.bashrc`, below the line that sources Omarchy's `rc`):
+**Fish shell:** make fish my login shell, with Omarchy's bash defaults carried over. Omarchy only ships bash config, so these files are the port. Leave `~/.bashrc` as it is, so bash still works as a fallback.
 
-**File:** `files/bashrc.append`
+Copy these into place, creating the directories if needed. They replace the target file, so back up any that already exist:
 
-These hide Ghostscript's `gs` and Graphviz's `gc`, in interactive shells only. That's intended. If your permissions block editing `~/.bashrc`, don't work around it. Give me the lines to paste.
+| File | Target |
+|---|---|
+| `files/fish-conf.d-omarchy.fish` | `~/.config/fish/conf.d/omarchy.fish` |
+| `files/fish-completions-omarchy.fish` | `~/.config/fish/completions/omarchy.fish` |
+
+The port loads Starship, mise, zoxide and fzf, and defines Omarchy's aliases and functions. It uses Omarchy's own `env-bootstrap` and `fns/*` scripts for the environment and for the tmux, herdr, rsync, drive and `ssh` helpers. Check that those two still exist under `/usr/share/omarchy/default/bash/`. If they've moved, stop and ask me.
+
+**Shell aliases** (`~/.config/fish/config.fish`, which loads after the port, so these win):
+
+**File:** `files/fish-config.append.fish`
+
+These hide Ghostscript's `gs` and Graphviz's `gc`, in interactive shells only. They also replace Omarchy's `ga` worktree command with `git add`. That's intended. If your permissions block editing `~/.config/fish/config.fish`, don't work around it. Give me the lines to paste.
+
+**Login shell:** do this last, after the files above are in place and `fish -ic 'functions -q zd tdl gs; and echo ok'` prints `ok`:
+
+```bash
+sudo chsh -s /usr/bin/fish "$USER"
+```
+
+If no terminal is available for a password, use `pkexec chsh -s /usr/bin/fish "$USER"`. Don't log me out yourself. Tell me to log out and back in, because new terminals can keep opening bash until I do.
 
 ## Step 6: Terminal prompt
 
-Back up `~/.config/starship.toml`, then replace it with `files/starship.toml`. It recreates the CybexOS prompt (the oh-my-posh theme `EDM115-newline2`) in Starship, which Omarchy's bash already loads, so don't install oh-my-posh or edit `~/.bashrc` for this.
+Back up `~/.config/starship.toml`, then replace it with `files/starship.toml`. It recreates the CybexOS prompt (the oh-my-posh theme `EDM115-newline2`) in Starship, which the fish config from Step 5 already loads, so don't install oh-my-posh or edit the fish config for this.
 
 The look: two lines. The top line is `╭─`, the OS icon and the full path on the left, with capsules for git and for Node, npm, pnpm, Python, Java and PHP on the right. The bottom line is `╰─ >`.
 
@@ -106,11 +125,13 @@ Copy the file as it is rather than retyping it, because its `\u` escapes must st
 
 **File:** `files/starship.toml`
 
-Check it from inside a git repo in a real interactive shell, with `bash -ic 'starship prompt --terminal-width 130'`. Open a new terminal to see it.
+Check it from inside a git repo in a real interactive shell, with `fish -ic 'starship prompt --terminal-width 130'`. Open a new terminal after logging back in to see it.
 
 Known differences from the original: there's no upstream (GitHub) icon in the git capsule, and capsules don't hide themselves in narrow terminals.
 
 ## Step 7: Validate
+
+Run this with bash, because the `for` loop isn't valid fish.
 
 ```bash
 hyprctl reload
@@ -122,6 +143,8 @@ omarchy menu keybindings --print | grep -E 'WhatsApp|Lock system|Toggle zoom|laz
 hyprctl workspacerules | grep -A8 'w\[t1\]'   # only with an external monitor connected
 foot --check-config
 git config --global core.pager                # expect delta
+getent passwd "$USER" | cut -d: -f7           # expect /usr/bin/fish
+fish -ic 'functions -q zd tdl gs; and echo ok' # expect ok
 ```
 
 If `hyprctl configerrors` reports anything, fix it and validate again. foot changes only show in new windows.
@@ -162,6 +185,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-08:** Switched the login shell to fish with a port of Omarchy's bash defaults. The git aliases moved from `~/.bashrc` to fish (Steps 1, 5, 6, 7).
 - **2026-11-08:** Hide the passwordless sudo icon in the bar (Step 5).
 - **2026-11-08:** Moved all config snippets into `files/`; the steps now point to them.
 - **2026-11-08:** Added the CybexOS terminal prompt style, recreated in Starship (Step 6).
