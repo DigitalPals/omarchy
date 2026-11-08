@@ -1,0 +1,75 @@
+# CybexOS prompt style (oh-my-posh EDM115-newline2) recreated in Starship.
+# Glyphs are written as \u escapes so this file stays plain ASCII.
+add_newline = true
+command_timeout = 1000
+format = """
+[\u256D\u2500](#f8f8f2)${custom.root}$os[\uE0B0](fg:#282a36 bg:#cccccc)$directory\
+$fill\
+$git_branch$git_status$nodejs${custom.npm}${custom.pnpm}$python$java$php
+[\u2570\u2500 >](#f8f8f2) """
+
+[fill]
+symbol = " "
+
+# Red bolt, only when running as root.
+[custom.root]
+when = 'test "$(id -u)" = 0'
+shell = ["sh"]
+format = "[\U000F140B](fg:#ff5555 bg:#282a36)"
+
+[os]
+disabled = false
+format = "[ $symbol  ](fg:#f8f8f2 bg:#282a36)"
+
+[os.symbols]
+Arch = "\uF303"
+Linux = "\uF303" # Omarchy reports as generic Linux
+
+[directory]
+truncation_length = 0
+truncate_to_repo = false
+read_only = " \uF023"
+format = "[ \U000F0256 $path$read_only](fg:#282a36 bg:#cccccc)[\uE0B4](fg:#cccccc)"
+
+[git_branch]
+format = "[\uE0B6](fg:#ffb86c)[\uE725 \\($branch\\)](fg:#282a36 bg:#ffb86c)"
+
+# The closing cap lives here so the capsule ends after the status counts.
+[git_status]
+format = "$ahead_behind$staged$modified$untracked$deleted[\uE0B4](fg:#ffb86c)"
+ahead = "[ +${count}](fg:#50fa7b bg:#ffb86c)"
+behind = "[ -${count}](fg:#ff5555 bg:#ffb86c)"
+diverged = "[ +${ahead_count}](fg:#50fa7b bg:#ffb86c)[ -${behind_count}](fg:#ff5555 bg:#ffb86c)"
+staged = "[ \uF046 ${count}](fg:#f8f8f2 bg:#ffb86c)"
+modified = "[ \uF044 ~${count}](fg:#f8f8f2 bg:#ffb86c)"
+untracked = "[ ?${count}](fg:#f8f8f2 bg:#ffb86c)"
+deleted = "[ x${count}](fg:#f8f8f2 bg:#ffb86c)"
+
+[nodejs]
+version_format = "${raw}"
+format = "[\uE0B6](fg:#50fa7b)[\uE718 $version](fg:#282a36 bg:#50fa7b)[\uE0B4](fg:#50fa7b)"
+
+# The ( ) group in format hides the capsule when the tool is missing.
+[custom.npm]
+detect_files = ["package-lock.json"]
+command = "npm --version"
+ignore_timeout = true
+format = "([\uE0B6](fg:#ff5555)[\uE71E $output](fg:#282a36 bg:#ff5555)[\uE0B4](fg:#ff5555))"
+
+[custom.pnpm]
+detect_files = ["pnpm-lock.yaml"]
+command = "pnpm --version"
+ignore_timeout = true
+format = "([\uE0B6](fg:#ffb86c)[\U000F02C1 $output](fg:#282a36 bg:#ffb86c)[\uE0B4](fg:#ffb86c))"
+
+[python]
+version_format = "${raw}"
+format = "[\uE0B6](fg:#50fa7b)[\uE73C $version](fg:#282a36 bg:#50fa7b)[\uE0B4](fg:#50fa7b)"
+
+[java]
+version_format = "${raw}"
+format = "[\uE0B6](fg:#ff79c6)[\uE738 $version](fg:#282a36 bg:#ff79c6)[\uE0B4](fg:#ff79c6)"
+
+[php]
+version_format = "${raw}"
+format = "[\uE0B6](fg:#6272a4)[\uE73D $version](fg:#f8f8f2 bg:#6272a4)[\uE0B4](fg:#6272a4)"
