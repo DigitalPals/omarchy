@@ -86,6 +86,10 @@ Append to `~/.config/hypr/looknfeel.lua`. This covers no focus stealing, 16 px r
 
 **Screensaver** (`~/.config/omarchy/shell.json`): set `idle.screensaver` to `0`, which disables it. Leave `idle.lock` as it is.
 
+**Passwordless sudo icon** (`~/.config/omarchy/shell.json`): hide the red icon next to the clock. Find the `omarchy.indicators` entry in `bar.layout` and set its `items` key to this list, which is every indicator except `PasswordlessSudo`. Keep the rest of the entry. This only hides the icon, so don't turn passwordless sudo on or off for this. The shell reloads the file automatically.
+
+**File:** `files/shell-indicators.items.json`
+
 **Shell aliases** (`~/.bashrc`, below the line that sources Omarchy's `rc`):
 
 **File:** `files/bashrc.append`
@@ -158,6 +162,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-08:** Hide the passwordless sudo icon in the bar (Step 5).
 - **2026-11-08:** Moved all config snippets into `files/`; the steps now point to them.
 - **2026-11-08:** Added the CybexOS terminal prompt style, recreated in Starship (Step 6).
 - **2026-11-08:** First version. CybexOS-style keybindings, natural scrolling, no focus stealing, look and feel, foot, git with delta, screensaver off, git aliases.
