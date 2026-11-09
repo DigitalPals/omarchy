@@ -70,7 +70,7 @@ Append to `~/.config/hypr/input.lua`.
 
 ## Step 4: Look and behaviour
 
-Append to `~/.config/hypr/looknfeel.lua`. This covers no focus stealing, 16 px rounded corners, no window borders, and a 15% side margin for a single tiled window on any external monitor. The margin code finds monitors on its own, so it needs no monitor names.
+Append to `~/.config/hypr/looknfeel.lua`. This covers no focus stealing, 16 px rounded corners, no window borders, a 15% side margin for a single tiled window on any external monitor, and a slide animation between workspaces. The margin code finds monitors on its own, so it needs no monitor names.
 
 **File:** `files/hypr-looknfeel.append.lua`
 
@@ -174,6 +174,7 @@ for o in input:natural_scroll input:touchpad:natural_scroll misc:focus_on_activa
 done                     # expect true, true, false, 0, 16
 omarchy menu keybindings --print | grep -E 'WhatsApp|Lock system|Toggle zoom|lazydocker'
 hyprctl workspacerules | grep -A8 'w\[t1\]'   # only with an external monitor connected
+hyprctl animations -j | jq -c '.[0][] | select(.name == "workspaces") | [.enabled, .speed, .bezier]'  # expect [true,6.00,"default"]
 foot --check-config
 git config --global core.pager                # expect delta
 getent passwd "$USER" | cut -d: -f7           # expect /usr/bin/fish
@@ -222,6 +223,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-09:** Added the CybexOS slide animation between workspaces (Step 4).
 - **2026-11-09:** Added the CybexOS-style workspace indicator: dots with a numbered accent chip for the active workspace (Step 7).
 - **2026-11-09:** Added CybexOS-style hug corners under the bar, pure black corners on the opposite screen edge, and a 33 px bar with 13 px text and icons (Step 7). Validate is now Step 8.
 - **2026-11-08:** Switched the login shell to fish with a port of Omarchy's bash defaults. The git aliases moved from `~/.bashrc` to fish (Steps 1, 5, 6, 7).

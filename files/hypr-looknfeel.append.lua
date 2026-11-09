@@ -47,3 +47,6 @@ end
 
 hl.on("monitor.layout_changed", update_single_window_margins)
 update_single_window_margins()
+
+-- CybexOS default: slide between workspaces. Omarchy turns this off.
+hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "default" })
