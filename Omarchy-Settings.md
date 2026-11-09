@@ -2,7 +2,7 @@
 
 > **Status: work in progress.** New preferences get added over time. To add one, put it in the matching section and add a line to the [Changelog](#changelog).
 >
-> To use it, copy this whole `Omarchy-Settings` directory to the target computer, then tell an AI agent there to read this file and follow everything below the line. The agent needs the `files/` folder too.
+> To use it, paste the prompt from [README.md](README.md) into an AI agent on the target computer. The agent reads this file and follows everything below the line. It needs the `files/` folder too.
 
 ---
 
