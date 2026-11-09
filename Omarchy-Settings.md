@@ -110,7 +110,7 @@ The port loads Starship, mise, zoxide and fzf, and defines Omarchy's aliases and
 
 **File:** `files/fish-config.append.fish`
 
-These hide Ghostscript's `gs` and Graphviz's `gc`, in interactive shells only. They also replace Omarchy's `ga` worktree command with `git add`. That's intended. If your permissions block editing `~/.config/fish/config.fish`, don't work around it. Give me the lines to paste.
+These hide Ghostscript's `gs` and Graphviz's `gc`, in interactive shells only. They also replace Omarchy's `ga` worktree command with `git add`, and make `claude` and `codex` start in YOLO mode, with no permission prompts and, for Codex, no sandbox. `cx` and `cy` are redefined to match, because Omarchy's versions pass flags that conflict with these. That's all intended. If your permissions block editing `~/.config/fish/config.fish`, don't work around it. Give me the lines to paste.
 
 **Login shell:** do this last, after the files above are in place and `fish -ic 'functions -q zd tdl gs; and echo ok'` prints `ok`:
 
@@ -185,6 +185,7 @@ foot --check-config
 git config --global core.pager                # expect delta
 getent passwd "$USER" | cut -d: -f7           # expect /usr/bin/fish
 fish -ic 'functions -q zd tdl gs; and echo ok' # expect ok
+fish -ic 'functions claude codex' | grep -c dangerously  # expect 4
 omarchy plugin list | grep john.hug-corners   # expect enabled
 hyprctl layers | grep -c john-hug-corners     # expect two per monitor; can take a few seconds to appear
 hyprctl monitors -j | jq -c '.[].reserved'    # expect [0,33,0,0] for each monitor
@@ -198,7 +199,6 @@ If `hyprctl configerrors` reports anything, fix it and validate again. foot chan
 Don't add these, even if they look useful:
 
 - **`lv3:ralt_switch` in `kb_options`:** it changes what Right Alt sends, which would likely break Omarchy's `ALT + Alt_R` push-to-talk.
-- **`claude --dangerously-skip-permissions` or `codex --dangerously-bypass-approvals-and-sandbox` as aliases:** they turn off the safety prompts for every session.
 - **SSH `IdentityAgent ~/.1password/agent.sock`:** only valid if that socket exists, and I haven't asked for it.
 - **Adding my account to the `docker` group:** it's effectively root access. Super+D falls back to `sudo` instead.
 - **Installing `xclip`:** Claude Code tries it before `wl-paste`, and it has been reported to break image paste on Wayland.
@@ -230,6 +230,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-09:** `claude` and `codex` start in YOLO mode in interactive fish shells, as on CybexOS, and `cx` and `cy` match. Removed from "Do not apply" (Step 5).
 - **2026-11-09:** Added Super+` for screenshots and Super+Shift+V to paste a copied image as a file path. The Quake console moved to Super+Alt+` (Step 2).
 - **2026-11-09:** Added the CybexOS slide animation between workspaces (Step 4).
 - **2026-11-09:** Added the CybexOS-style workspace indicator: dots with a numbered accent chip for the active workspace (Step 7).
