@@ -52,6 +52,7 @@ Append to `~/.config/hypr/bindings.lua`.
 | Super+Shift+B | Private browser | Browser |
 | Super+Alt+←/→ | Previous/next window in group | Move window into group |
 | Super+` | Screenshot | Toggle Quake console (now Super+Alt+`) |
+| Super+S | Spotify | Toggle scratchpad (no replacement key) |
 
 ### New keys
 
@@ -177,7 +178,7 @@ hyprctl configerrors     # must print nothing
 for o in input:natural_scroll input:touchpad:natural_scroll misc:focus_on_activate general:border_size decoration:rounding; do
   echo "$o: $(hyprctl getoption $o | head -1)"
 done                     # expect true, true, false, 0, 16
-omarchy menu keybindings --print | grep -E 'WhatsApp|Lock system|Toggle zoom|lazydocker|Paste copied image|Toggle Quake'
+omarchy menu keybindings --print | grep -E 'WhatsApp|Spotify|Lock system|Toggle zoom|lazydocker|Paste copied image|Toggle Quake'
 command -v clipboard-image-to-file            # expect ~/.local/bin/clipboard-image-to-file
 hyprctl workspacerules | grep -A8 'w\[t1\]'   # only with an external monitor connected
 hyprctl animations -j | jq -c '.[0][] | select(.name == "workspaces") | [.enabled, .speed, .bezier]'  # expect [true,6.00,"default"]
@@ -230,6 +231,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-09:** Super+S launches Spotify, replacing Omarchy's scratchpad toggle (Step 2).
 - **2026-11-09:** The workspace indicator now shows numbers for workspaces with windows, and dots only for empty ones (Step 7).
 - **2026-11-09:** `claude` and `codex` start in YOLO mode in interactive fish shells, as on CybexOS, and `cx` and `cy` match. Removed from "Do not apply" (Step 5).
 - **2026-11-09:** Added Super+` for screenshots and Super+Shift+V to paste a copied image as a file path. The Quake console moved to Super+Alt+` (Step 2).

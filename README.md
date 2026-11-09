@@ -20,7 +20,7 @@ The agent does the rest, including backups and validation.
 
 ## What it changes
 
-- **Keybindings:** CybexOS-style keys, including Super+W for WhatsApp, Super+L to lock and Super+F to float a window. Super+Q still closes windows.
+- **Keybindings:** CybexOS-style keys, including Super+W for WhatsApp, Super+S for Spotify, Super+L to lock and Super+F to float a window. Super+Q still closes windows.
 - **Menubar:** a 33 px bar with hug corners, and a workspace indicator with a sliding accent chip. Menus, panels and notifications get about 8% larger text.
 - **Look and behaviour:** 16 px rounded corners, no window borders, no focus stealing, and a slide animation between workspaces.
 - **Screenshots:** Super+` takes a screenshot, and Super+Shift+V pastes a copied image into a terminal as a file path. The Quake console moves to Super+Alt+`.

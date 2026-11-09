@@ -10,6 +10,7 @@ o.rebind("SUPER + SHIFT + B", "Browser (private)", { omarchy = "browser --privat
 o.rebind("SUPER + ALT + LEFT", "Previous window in group", hl.dsp.group.prev()) -- was: move window to group on left
 o.rebind("SUPER + ALT + RIGHT", "Next window in group", hl.dsp.group.next()) -- was: move window to group on right
 o.rebind("SUPER + grave", "Screenshot", "omarchy-capture-screenshot") -- was: toggle Quake console (now Super+Alt+grave)
+o.rebind("SUPER + S", "Spotify", { omarchy = "spotify" }) -- was: toggle scratchpad
 
 -- CybexOS keys that are free on Omarchy.
 o.bind("SUPER + B", "Browser", { omarchy = "browser" })
