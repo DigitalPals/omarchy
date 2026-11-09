@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "john.workspaces",
-  "name": "Workspace Dots",
-  "version": "1.1.0",
+  "name": "Workspace Numbers",
+  "version": "1.2.0",
   "author": "John Pals",
-  "description": "Workspace dots with a numbered, sliding accent chip, in the style of CybexOS.",
+  "description": "Numbers for workspaces with windows, dots for empty ones, and a sliding accent chip for the active one, in the style of CybexOS.",
   "kinds": [
     "bar-widget"
   ],
@@ -12,8 +12,8 @@
     "barWidget": "Workspaces.qml"
   },
   "barWidget": {
-    "displayName": "Workspace Dots",
-    "description": "Workspace dots with a numbered, sliding accent chip, in the style of CybexOS.",
+    "displayName": "Workspace Numbers",
+    "description": "Numbers for workspaces with windows, dots for empty ones, and a sliding accent chip for the active one, in the style of CybexOS.",
     "category": "Compositor",
     "allowMultiple": false
   },

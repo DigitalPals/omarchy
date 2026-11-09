@@ -161,7 +161,7 @@ The font size is shell-wide, so menus, panels and notifications also get about 8
 
 Known limits: the corners only draw with an opaque bar on the top or bottom edge, and hide for a glassy or clear bar. They match window corners at `rounding_power` 2, so Omarchy's `corners-rounded` toggle (power 3) changes the window curve but not theirs.
 
-**Workspace indicator:** this replaces Omarchy's workspace widget with the CybexOS look. The active workspace is a numbered accent chip that slides between slots, and every other workspace is a dot. Copy the folder below to `~/.config/omarchy/plugins/john.workspaces/`, keeping its files as they are. Then, in `~/.config/omarchy/shell.json`, change the `omarchy.workspaces` entry in `bar.layout` to `john.workspaces`, keeping its position, and run `omarchy restart shell`.
+**Workspace indicator:** this replaces Omarchy's workspace widget with the CybexOS look. The active workspace is a numbered accent chip that slides between slots, workspaces with windows show their number, and empty ones are dots. Copy the folder below to `~/.config/omarchy/plugins/john.workspaces/`, keeping its files as they are. Then, in `~/.config/omarchy/shell.json`, change the `omarchy.workspaces` entry in `bar.layout` to `john.workspaces`, keeping its position, and run `omarchy restart shell`.
 
 **File:** `files/shell-plugin-workspaces/`
 
@@ -230,6 +230,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-09:** The workspace indicator now shows numbers for workspaces with windows, and dots only for empty ones (Step 7).
 - **2026-11-09:** `claude` and `codex` start in YOLO mode in interactive fish shells, as on CybexOS, and `cx` and `cy` match. Removed from "Do not apply" (Step 5).
 - **2026-11-09:** Added Super+` for screenshots and Super+Shift+V to paste a copied image as a file path. The Quake console moved to Super+Alt+` (Step 2).
 - **2026-11-09:** Added the CybexOS slide animation between workspaces (Step 4).

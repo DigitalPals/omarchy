@@ -7,8 +7,8 @@ import qs.Commons as Commons
 import qs.Ui
 
 // Omarchy's workspace widget, with CybexOS's look: the shown workspace is a
-// numbered accent chip that slides between slots, and every other workspace is
-// a dot. The workspace logic is Omarchy's. The look and motion are adapted from
+// numbered accent chip that slides between slots, workspaces with windows show
+// their number, and empty ones are dots. The workspace logic is Omarchy's. The look and motion are adapted from
 // CybexOS desktop/quickshell/Bar/Workspaces.qml (MIT, see LICENSE-CybexOS).
 BarWidget {
   id: root
@@ -321,7 +321,7 @@ BarWidget {
         }
       }
 
-      // The chip marks the shown workspace, so its own dot steps aside.
+      // Only an empty workspace that isn't shown has a dot.
       Rectangle {
         anchors.centerIn: parent
         width: root.dotSize
@@ -329,7 +329,7 @@ BarWidget {
         radius: root.dotSize / 2
         scale: button.pressScale
         color: cell.urgent ? (root.bar ? root.bar.urgent : Commons.Color.urgent) : root.dotColor
-        opacity: cell.shown ? 0 : (cell.urgent ? 1 : (cell.occupied ? root.occupiedOpacity : root.emptyOpacity))
+        opacity: cell.shown || cell.occupied ? 0 : (cell.urgent ? 1 : root.emptyOpacity)
 
         Behavior on color {
           ColorAnimation { duration: Style.duration(200) }
@@ -340,7 +340,7 @@ BarWidget {
         }
       }
 
-      // Stays in its own cell and fades in as the chip arrives, as in CybexOS.
+      // Stays in its own cell while the chip slides over it, as in CybexOS.
       // Placed by its baseline, so the digit itself is what gets centered
       // rather than the line box around it. Digits are 0.73 of the font size;
       // Qt's tightBoundingRect rounds that up, which would sit the digit low.
@@ -350,10 +350,18 @@ BarWidget {
         anchors.baselineOffset: (parent.height + numberMetrics.font.pixelSize * 0.73) / 2
         textFormat: Text.PlainText
         text: root.slotOf(cell.modelData) === root.slots ? "0" : String(root.slotOf(cell.modelData))
-        color: Commons.Color.background
-        font: numberMetrics.font
+        color: cell.shown ? Commons.Color.background
+          : cell.urgent ? (root.bar ? root.bar.urgent : Commons.Color.urgent)
+          : root.dotColor
+        font.family: numberMetrics.font.family
+        font.pixelSize: numberMetrics.font.pixelSize
+        font.weight: cell.shown || cell.urgent ? Font.DemiBold : Font.Medium
         renderType: Text.NativeRendering
-        opacity: cell.shown ? 1 : 0
+        opacity: cell.shown || cell.urgent ? 1 : (cell.occupied ? root.occupiedOpacity : 0)
+
+        Behavior on color {
+          ColorAnimation { duration: Style.duration(200) }
+        }
 
         Behavior on opacity {
           NumberAnimation { duration: Style.duration(160); easing.type: Easing.OutCubic }
