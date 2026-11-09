@@ -129,7 +129,34 @@ Check it from inside a git repo in a real interactive shell, with `fish -ic 'sta
 
 Known differences from the original: there's no upstream (GitHub) icon in the git capsule, and capsules don't hide themselves in narrow terminals.
 
-## Step 7: Validate
+## Step 7: Menubar
+
+This gives the bar the CybexOS "hug" look, extended to the whole desktop: concave corners in the bar color under both ends of the bar, pure black corners on the opposite screen edge, and a 33 px bar with 13 px text and icons. Omarchy's defaults are 26 px and 12 px.
+
+**Hug corners:** copy the folder below to `~/.config/omarchy/plugins/john.hug-corners/`, keeping its files as they are. The plugin is already adapted for Omarchy, so don't fetch anything from CybexOS. Then enable it:
+
+```bash
+omarchy plugin validate ~/.config/omarchy/plugins/john.hug-corners
+omarchy-shell shell rescanPlugins
+omarchy plugin enable john.hug-corners
+```
+
+**File:** `files/shell-plugin-hug-corners/`
+
+**Bar and text size:** copy these into place, creating the directory if needed. They apply to every theme.
+
+| File | Target |
+|---|---|
+| `files/themed-shell.bar.toml.tpl` | `~/.config/omarchy/themed/shell.bar.toml.tpl` |
+| `files/themed-shell.font.toml.tpl` | `~/.config/omarchy/themed/shell.font.toml.tpl` |
+
+Then run `omarchy theme refresh`, which applies them and leaves the wallpaper alone. Use `refresh` rather than `omarchy theme set`. `size-horizontal = 30` is correct for a 33 px bar, because Omarchy scales it with the font size.
+
+The font size is shell-wide, so menus, panels and notifications also get about 8% larger.
+
+Known limits: the corners only draw with an opaque bar on the top or bottom edge, and hide for a glassy or clear bar. They match window corners at `rounding_power` 2, so Omarchy's `corners-rounded` toggle (power 3) changes the window curve but not theirs.
+
+## Step 8: Validate
 
 Run this with bash, because the `for` loop isn't valid fish.
 
@@ -145,6 +172,9 @@ foot --check-config
 git config --global core.pager                # expect delta
 getent passwd "$USER" | cut -d: -f7           # expect /usr/bin/fish
 fish -ic 'functions -q zd tdl gs; and echo ok' # expect ok
+omarchy plugin list | grep john.hug-corners   # expect enabled
+hyprctl layers | grep -c john-hug-corners     # expect two per monitor; can take a few seconds to appear
+hyprctl monitors -j | jq -c '.[].reserved'    # expect [0,33,0,0] for each monitor
 ```
 
 If `hyprctl configerrors` reports anything, fix it and validate again. foot changes only show in new windows.
@@ -185,6 +215,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-09:** Added CybexOS-style hug corners under the bar, pure black corners on the opposite screen edge, and a 33 px bar with 13 px text and icons (Step 7). Validate is now Step 8.
 - **2026-11-08:** Switched the login shell to fish with a port of Omarchy's bash defaults. The git aliases moved from `~/.bashrc` to fish (Steps 1, 5, 6, 7).
 - **2026-11-08:** Hide the passwordless sudo icon in the bar (Step 5).
 - **2026-11-08:** Moved all config snippets into `files/`; the steps now point to them.

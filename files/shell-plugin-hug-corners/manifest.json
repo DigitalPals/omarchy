@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "john.hug-corners",
+  "name": "Hug Corners",
+  "version": "1.3.0",
+  "author": "John Pals",
+  "license": "MIT",
+  "description": "Rounds all four desktop corners: in the bar color against the bar, in the style of the CybexOS hug menubar, and pure black on the opposite edge.",
+  "kinds": [
+    "service"
+  ],
+  "entryPoints": {
+    "service": "Main.qml"
+  }
+}
