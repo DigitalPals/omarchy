@@ -156,6 +156,12 @@ The font size is shell-wide, so menus, panels and notifications also get about 8
 
 Known limits: the corners only draw with an opaque bar on the top or bottom edge, and hide for a glassy or clear bar. They match window corners at `rounding_power` 2, so Omarchy's `corners-rounded` toggle (power 3) changes the window curve but not theirs.
 
+**Workspace indicator:** this replaces Omarchy's workspace widget with the CybexOS look. The active workspace is a numbered accent chip that slides between slots, and every other workspace is a dot. Copy the folder below to `~/.config/omarchy/plugins/john.workspaces/`, keeping its files as they are. Then, in `~/.config/omarchy/shell.json`, change the `omarchy.workspaces` entry in `bar.layout` to `john.workspaces`, keeping its position, and run `omarchy restart shell`.
+
+**File:** `files/shell-plugin-workspaces/`
+
+It doesn't show the workspace layout, and clicking the active chip does nothing. Super+Ctrl+L still cycles layouts. Digit centering is tuned for JetBrains Mono, so a very different bar font may sit slightly off.
+
 ## Step 8: Validate
 
 Run this with bash, because the `for` loop isn't valid fish.
@@ -175,6 +181,7 @@ fish -ic 'functions -q zd tdl gs; and echo ok' # expect ok
 omarchy plugin list | grep john.hug-corners   # expect enabled
 hyprctl layers | grep -c john-hug-corners     # expect two per monitor; can take a few seconds to appear
 hyprctl monitors -j | jq -c '.[].reserved'    # expect [0,33,0,0] for each monitor
+omarchy plugin list | grep -E 'john.workspaces|omarchy.workspaces'  # expect john.workspaces enabled, omarchy.workspaces disabled
 ```
 
 If `hyprctl configerrors` reports anything, fix it and validate again. foot changes only show in new windows.
@@ -215,6 +222,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-09:** Added the CybexOS-style workspace indicator: dots with a numbered accent chip for the active workspace (Step 7).
 - **2026-11-09:** Added CybexOS-style hug corners under the bar, pure black corners on the opposite screen edge, and a 33 px bar with 13 px text and icons (Step 7). Validate is now Step 8.
 - **2026-11-08:** Switched the login shell to fish with a port of Omarchy's bash defaults. The git aliases moved from `~/.bashrc` to fish (Steps 1, 5, 6, 7).
 - **2026-11-08:** Hide the passwordless sudo icon in the bar (Step 5).
