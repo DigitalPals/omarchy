@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# Paste the clipboard's image into the focused window as a file path, for
+# terminal apps like Claude Code that attach an image from its path. The image
+# goes back on the clipboard afterwards, so this can be repeated.
+#
+# Adapted from CybexOS assets/scripts/clipboard-image-to-file.
+# Copyright (c) 2026 DigitalPals and Cybex OS contributors. MIT License.
+set -euo pipefail
+umask 077
+
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/clipboard-images"
+mkdir -p "$cache_dir"
+chmod 0700 "$cache_dir"
+
+# Keep at most a week of images, and at most 100 of them.
+prune_cache() {
+  find "$cache_dir" -maxdepth 1 -type f -name 'clipboard-*' -mtime +7 -delete
+  local files=() excess index
+  mapfile -d '' -t files < <(find "$cache_dir" -maxdepth 1 -type f \
+    -name 'clipboard-*' -printf '%f\0' | sort -z)
+  excess=$((${#files[@]} - 100))
+  for ((index = 0; index < excess; index++)); do
+    rm -f -- "$cache_dir/${files[index]}"
+  done
+}
+
+# Hyprland sends this with explicit modifiers. wtype can't be used here: the
+# Super key still held from the shortcut would merge into its keystroke.
+send_paste_key() {
+  hyprctl dispatch "hl.dsp.send_key_state({ mods = \"SHIFT\", key = \"Insert\", state = \"$1\" })" >/dev/null
+}
+
+mime="$(wl-paste --list-types 2>/dev/null | grep -E '^image/' | head -n 1 || true)"
+if [[ -z "$mime" ]]; then
+  notify-send "Clipboard" "No image in clipboard"
+  exit 1
+fi
+
+case "$mime" in
+  image/png) ext="png" ;;
+  image/jpeg) ext="jpg" ;;
+  image/webp) ext="webp" ;;
+  image/gif) ext="gif" ;;
+  image/bmp) ext="bmp" ;;
+  image/tiff) ext="tiff" ;;
+  *) ext="bin" ;;
+esac
+
+outfile="$cache_dir/clipboard-$(date +%Y%m%d-%H%M%S-%N).$ext"
+wl-paste --type "$mime" --no-newline >"$outfile"
+prune_cache
+
+# Marked sensitive so the temporary path stays out of the clipboard history.
+printf '%s' "$outfile" | wl-copy --sensitive --type text/plain
+
+# Wait until the clipboard really offers the path before pasting.
+for _ in {1..20}; do
+  if [[ "$(wl-paste --type text/plain --no-newline 2>/dev/null || true)" == "$outfile" ]]; then
+    break
+  fi
+  sleep 0.02
+done
+
+sleep 0.05
+send_paste_key down
+sleep 0.05
+send_paste_key up
+
+# Put the image back, unless something else was copied in the meantime.
+sleep 0.3
+if [[ "$(wl-paste --type text/plain --no-newline 2>/dev/null || true)" == "$outfile" ]]; then
+  wl-copy --type "$mime" <"$outfile"
+fi

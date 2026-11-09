@@ -9,6 +9,7 @@ o.rebind("SUPER + ALT + SPACE", "Omarchy menu", { menu = "root" }) -- was: apps
 o.rebind("SUPER + SHIFT + B", "Browser (private)", { omarchy = "browser --private" }) -- was: browser (now Super+B)
 o.rebind("SUPER + ALT + LEFT", "Previous window in group", hl.dsp.group.prev()) -- was: move window to group on left
 o.rebind("SUPER + ALT + RIGHT", "Next window in group", hl.dsp.group.next()) -- was: move window to group on right
+o.rebind("SUPER + grave", "Screenshot", "omarchy-capture-screenshot") -- was: toggle Quake console (now Super+Alt+grave)
 
 -- CybexOS keys that are free on Omarchy.
 o.bind("SUPER + B", "Browser", { omarchy = "browser" })
@@ -22,5 +23,7 @@ end)
 o.bind("F9", "Superwhisper: toggle dictation", "superwhisper record")
 o.bind("SUPER + CTRL + G", "Move active window out of group", hl.dsp.window.move({ out_of_group = true }))
 o.bind("SHIFT + PRINT", "Screenshot full screen", "omarchy-capture-screenshot fullscreen")
+o.bind("SUPER + SHIFT + V", "Paste copied image as a file path", "clipboard-image-to-file")
+o.bind("SUPER + ALT + grave", "Toggle Quake console", hl.dsp.workspace.toggle_special("qconsole"))
 -- Falls back to sudo because this account is not in the docker group.
 o.bind("SUPER + D", "Docker (lazydocker)", "omarchy-launch-tui --app-id=org.omarchy.lazydocker sh -c 'docker info >/dev/null 2>&1 && exec lazydocker; exec sudo lazydocker'")

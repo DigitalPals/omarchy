@@ -51,16 +51,21 @@ Append to `~/.config/hypr/bindings.lua`.
 | Super+Alt+Space | Omarchy menu | Apps |
 | Super+Shift+B | Private browser | Browser |
 | Super+Alt+←/→ | Previous/next window in group | Move window into group |
+| Super+` | Screenshot | Toggle Quake console (now Super+Alt+`) |
 
 ### New keys
 
-Super+B browser, Super+E files, Super+Y YouTube, Super+N notification history, Super+Z 2x zoom toggle, F9 dictation, Super+Ctrl+G move window out of group, Shift+Print full-screen screenshot, Super+D lazydocker.
+Super+B browser, Super+E files, Super+Y YouTube, Super+N notification history, Super+Z 2x zoom toggle, F9 dictation, Super+Ctrl+G move window out of group, Shift+Print full-screen screenshot, Super+D lazydocker, Super+Shift+V paste a copied image as a file path, Super+Alt+` Quake console.
 
 ### Code
 
 **File:** `files/hypr-bindings.append.lua`
 
 **F9:** this binding needs Superwhisper. If `command -v superwhisper` finds nothing, use `"omarchy-dictation toggle"` instead and tell me.
+
+**Super+Shift+V:** this binding needs a script. Copy the file below to `~/.local/bin/clipboard-image-to-file` and make it executable with `chmod 0755`. It saves the copied image to `~/.cache/clipboard-images/`, pastes its file path for terminal apps like Claude Code, then puts the image back on the clipboard. In Claude Code, plain Ctrl+V also attaches a copied image directly.
+
+**File:** `files/clipboard-image-to-file`
 
 ## Step 3: Input
 
@@ -172,7 +177,8 @@ hyprctl configerrors     # must print nothing
 for o in input:natural_scroll input:touchpad:natural_scroll misc:focus_on_activate general:border_size decoration:rounding; do
   echo "$o: $(hyprctl getoption $o | head -1)"
 done                     # expect true, true, false, 0, 16
-omarchy menu keybindings --print | grep -E 'WhatsApp|Lock system|Toggle zoom|lazydocker'
+omarchy menu keybindings --print | grep -E 'WhatsApp|Lock system|Toggle zoom|lazydocker|Paste copied image|Toggle Quake'
+command -v clipboard-image-to-file            # expect ~/.local/bin/clipboard-image-to-file
 hyprctl workspacerules | grep -A8 'w\[t1\]'   # only with an external monitor connected
 hyprctl animations -j | jq -c '.[0][] | select(.name == "workspaces") | [.enabled, .speed, .bezier]'  # expect [true,6.00,"default"]
 foot --check-config
@@ -195,6 +201,7 @@ Don't add these, even if they look useful:
 - **`claude --dangerously-skip-permissions` or `codex --dangerously-bypass-approvals-and-sandbox` as aliases:** they turn off the safety prompts for every session.
 - **SSH `IdentityAgent ~/.1password/agent.sock`:** only valid if that socket exists, and I haven't asked for it.
 - **Adding my account to the `docker` group:** it's effectively root access. Super+D falls back to `sudo` instead.
+- **Installing `xclip`:** Claude Code tries it before `wl-paste`, and it has been reported to break image paste on Wayland.
 
 ## Considered and not chosen
 
@@ -223,6 +230,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-09:** Added Super+` for screenshots and Super+Shift+V to paste a copied image as a file path. The Quake console moved to Super+Alt+` (Step 2).
 - **2026-11-09:** Added the CybexOS slide animation between workspaces (Step 4).
 - **2026-11-09:** Added the CybexOS-style workspace indicator: dots with a numbered accent chip for the active workspace (Step 7).
 - **2026-11-09:** Added CybexOS-style hug corners under the bar, pure black corners on the opposite screen edge, and a 33 px bar with 13 px text and icons (Step 7). Validate is now Step 8.
