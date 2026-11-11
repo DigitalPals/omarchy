@@ -1,0 +1,16 @@
+# Tokyo Night ships its own shell.lock.toml, which wins over the user template
+# in ~/.config/omarchy/themed/. This overlay replaces it with the same look as
+# themed-shell.lock.toml.tpl, rendered for Tokyo Night's colours
+# (background #1a1b26, foreground #a9b1d6, red #f7768e, accent #7aa2f7).
+background       = "#20212d"
+background-alpha = 0.85
+text             = "#a9b1d6"
+placeholder      = "#7e84a1"
+text-error       = "#f7768e"
+border           = "#2f3240"
+border-active    = "#2f3240"
+border-error     = "#f7768e"
+border-alpha     = 1.0
+border-width     = 2
+selection        = "#7aa2f7"
+selection-alpha  = 0.45

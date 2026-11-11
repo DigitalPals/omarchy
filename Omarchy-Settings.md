@@ -168,7 +168,27 @@ Known limits: the corners only draw with an opaque bar on the top or bottom edge
 
 It doesn't show the workspace layout, and clicking the active chip does nothing. Super+Ctrl+L still cycles layouts. Digit centering is tuned for JetBrains Mono, so a very different bar font may sit slightly off.
 
-## Step 8: Validate
+## Step 8: Lock screen
+
+This gives Omarchy's lock screen the CybexOS password field: a dark surface at 85% over the blurred wallpaper, a thin neutral 2 px outline instead of the 3 px accent one, muted placeholder text and a red outline after a wrong password. It only uses theme colours, so the lock itself stays Omarchy's. Don't install hyprlock or clone the `omarchy.lock` plugin for this.
+
+Copy this into place. It applies to every theme:
+
+| File | Target |
+|---|---|
+| `files/themed-shell.lock.toml.tpl` | `~/.config/omarchy/themed/shell.lock.toml.tpl` |
+
+**Tokyo Night:** it's the only stock theme that ships its own `shell.lock.toml`, and a theme's own file wins over the template above. So also copy the overlay below, which has the same look in Tokyo Night's colours. Copy it even if Tokyo Night isn't the current theme.
+
+| File | Target |
+|---|---|
+| `files/theme-tokyo-night.shell.lock.toml` | `~/.config/omarchy/themes/tokyo-night/shell.lock.toml` |
+
+Then run `omarchy theme refresh`. If any other theme in `/usr/share/omarchy/themes/*/shell.lock.toml` ships a lock file by now, tell me instead of writing an overlay for it.
+
+Known limits: there's no clock or date, the field keeps Omarchy's size (381×67 instead of 300×54), the wallpaper isn't dimmed, the outline doesn't turn accent while the password is checked, and the corner radius follows Hyprland's `rounding`. Those need changes to Omarchy's lock plugin (see Open items).
+
+## Step 9: Validate
 
 Run this with bash, because the `for` loop isn't valid fish.
 
@@ -191,7 +211,10 @@ omarchy plugin list | grep john.hug-corners   # expect enabled
 hyprctl layers | grep -c john-hug-corners     # expect two per monitor; can take a few seconds to appear
 hyprctl monitors -j | jq -c '.[].reserved'    # expect [0,33,0,0] for each monitor
 omarchy plugin list | grep -E 'john.workspaces|omarchy.workspaces'  # expect john.workspaces enabled, omarchy.workspaces disabled
+awk '/^\[lock\]/{p=1;next} /^\[/{p=0} p' ~/.local/state/omarchy/current/theme/shell.toml | grep -E '^(background-alpha|border-width) '  # expect 0.85 and 2
 ```
+
+To look at the lock screen without locking, run `omarchy-shell lock preview`, then `omarchy-shell lock hidePreview` (or click it).
 
 If `hyprctl configerrors` reports anything, fix it and validate again. foot changes only show in new windows.
 
@@ -219,6 +242,7 @@ Not yet decided or done:
 
 - Key for scrolling screenshots: `omarchy capture screenshot scroll` exists but has no key yet.
 - No Omarchy equivalent found yet for the Super+Tab window overview, game mode or the Super+I assistant.
+- Lock screen clock and date: the CybexOS lock shows a large clock and the date above the password field. Omarchy's lock plugin has no setting for this, and cloning it would freeze its authentication code, so the route is an upstream Omarchy PR for an optional clock and date.
 
 ## Report back
 
@@ -231,6 +255,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-11:** Added the CybexOS lock screen password field through theme colours, with an overlay for Tokyo Night (Step 8). Validate is now Step 9.
 - **2026-11-09:** Super+S launches Spotify, replacing Omarchy's scratchpad toggle (Step 2).
 - **2026-11-09:** The workspace indicator now shows numbers for workspaces with windows, and dots only for empty ones (Step 7).
 - **2026-11-09:** `claude` and `codex` start in YOLO mode in interactive fish shells, as on CybexOS, and `cx` and `cy` match. Removed from "Do not apply" (Step 5).
