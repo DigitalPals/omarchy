@@ -168,6 +168,16 @@ Known limits: the corners only draw with an opaque bar on the top or bottom edge
 
 It doesn't show the workspace layout, and clicking the active chip does nothing. Super+Ctrl+L still cycles layouts. Digit centering is tuned for JetBrains Mono, so a very different bar font may sit slightly off.
 
+**Model Usage instead of Agents:** I use my own Model Usage widget ([DigitalPals/omarchy-modelusage](https://github.com/DigitalPals/omarchy-modelusage)) for AI usage and limits, so it replaces Omarchy's Agents widget. If `omarchy plugin list` already shows `digitalpals.model-usage`, for example as a symlink to a local checkout, leave it as it is and skip the `add`. Otherwise add it from git:
+
+```bash
+omarchy plugin add https://github.com/DigitalPals/omarchy-modelusage.git --enable --yes
+omarchy bar move digitalpals.model-usage --before omarchy.keyboard-layout
+omarchy plugin disable omarchy.agents
+```
+
+`omarchy plugin disable` takes Agents off the bar and keeps it off. Agents is only a bar widget, so nothing else stops. Don't install anything extra for Model Usage. Its optional Fusebox live activity needs Python `websockets`, and without it the widget just shows live activity as unavailable. Don't copy provider, proxy or key settings from another computer. I set those up in the widget's own settings.
+
 ## Step 8: Lock screen
 
 This gives Omarchy's lock screen the CybexOS password field: a dark surface at 85% over the blurred wallpaper, a thin neutral 2 px outline instead of the 3 px accent one, muted placeholder text and a red outline after a wrong password. It only uses theme colours, so the lock itself stays Omarchy's. Don't install hyprlock or clone the `omarchy.lock` plugin for this.
@@ -211,6 +221,7 @@ omarchy plugin list | grep john.hug-corners   # expect enabled
 hyprctl layers | grep -c john-hug-corners     # expect two per monitor; can take a few seconds to appear
 hyprctl monitors -j | jq -c '.[].reserved'    # expect [0,33,0,0] for each monitor
 omarchy plugin list | grep -E 'john.workspaces|omarchy.workspaces'  # expect john.workspaces enabled, omarchy.workspaces disabled
+omarchy plugin list | grep -E 'digitalpals.model-usage|omarchy.agents'  # expect model-usage enabled, agents disabled
 awk '/^\[lock\]/{p=1;next} /^\[/{p=0} p' ~/.local/state/omarchy/current/theme/shell.toml | grep -E '^(background-alpha|border-width) '  # expect 0.85 and 2
 ```
 
@@ -255,6 +266,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-11:** My Model Usage widget replaces Omarchy's Agents widget in the bar (Step 7).
 - **2026-11-11:** Added the CybexOS lock screen password field through theme colours, with an overlay for Tokyo Night (Step 8). Validate is now Step 9.
 - **2026-11-09:** Super+S launches Spotify, replacing Omarchy's scratchpad toggle (Step 2).
 - **2026-11-09:** The workspace indicator now shows numbers for workspaces with windows, and dots only for empty ones (Step 7).
