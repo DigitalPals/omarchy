@@ -1,3 +1,4 @@
+-- BEGIN omarchy-settings: hypr-bindings (managed block, replaced on update)
 -- CybexOS muscle memory: keys that do something different on Omarchy.
 o.rebind("SUPER + W", "WhatsApp", { webapp = "https://web.whatsapp.com/", focus = true }) -- was: close window (Super+Q still closes)
 o.rebind("SUPER + L", "Lock system", "omarchy-system-lock") -- was: cycle workspace layout
@@ -28,3 +29,4 @@ o.bind("SUPER + SHIFT + V", "Paste copied image as a file path", "clipboard-imag
 o.bind("SUPER + ALT + grave", "Toggle Quake console", hl.dsp.workspace.toggle_special("qconsole"))
 -- Falls back to sudo because this account is not in the docker group.
 o.bind("SUPER + D", "Docker (lazydocker)", "omarchy-launch-tui --app-id=org.omarchy.lazydocker sh -c 'docker info >/dev/null 2>&1 && exec lazydocker; exec sudo lazydocker'")
+-- END omarchy-settings: hypr-bindings

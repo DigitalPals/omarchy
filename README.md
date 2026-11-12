@@ -2,15 +2,17 @@
 
 My personal preferences for [Omarchy](https://omarchy.org/), packaged so an AI agent can apply them to a computer. They bring over the keybindings, menubar and defaults I'm used to from CybexOS.
 
-## Install
+## Install or update
 
 Open an AI agent on the target computer, such as Claude Code or Codex, and paste this:
 
 ```text
-Clone https://github.com/DigitalPals/omarchy into ~/Code/omarchy. If that folder already exists, run `git pull` there instead. Then read Omarchy-Settings.md in that folder and follow all of its instructions below the line, using the files/ folder next to it. When you finish, give me the report that document asks for.
+Clone https://github.com/DigitalPals/omarchy into ~/Code/omarchy. If that folder already exists, run `git pull` there instead, and stop and tell me if the pull fails. Then read Omarchy-Settings.md in that folder and follow all of its instructions below the line, using the files/ folder next to it. If this computer already has an earlier version, apply only what changed since then, as that document describes. When you finish, give me the report that document asks for.
 ```
 
 The agent does the rest, including backups and validation.
+
+To update later, paste the same line again. Each run records which commit it applied in `~/.local/state/omarchy-settings/applied`, and the next run applies only what changed since then. To force a full run, delete that file first.
 
 ## Before you run it
 

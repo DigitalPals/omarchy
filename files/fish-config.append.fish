@@ -1,3 +1,4 @@
+# BEGIN omarchy-settings: fish-config (managed block, replaced on update)
 # CybexOS git aliases
 alias gs='git status'
 alias ga='git add'
@@ -16,3 +17,4 @@ if status is-interactive
     alias cx='printf "\033[2J\033[3J\033[H"; and claude'
     alias cy='codex'
 end
+# END omarchy-settings: fish-config

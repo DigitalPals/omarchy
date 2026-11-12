@@ -1,3 +1,4 @@
+-- BEGIN omarchy-settings: hypr-looknfeel (managed block, replaced on update)
 -- CybexOS defaults: no focus stealing, rounded corners, no window borders.
 hl.config({
   general = { border_size = 0 },
@@ -50,3 +51,4 @@ update_single_window_margins()
 
 -- CybexOS default: slide between workspaces. Omarchy turns this off.
 hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "default" })
+-- END omarchy-settings: hypr-looknfeel

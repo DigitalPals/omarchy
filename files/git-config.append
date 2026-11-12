@@ -1,3 +1,4 @@
+# BEGIN omarchy-settings: git-config (managed block, replaced on update)
 [core]
 	pager = delta
 [interactive]
@@ -5,3 +6,4 @@
 [delta]
 	navigate = true
 	side-by-side = true
+# END omarchy-settings: git-config

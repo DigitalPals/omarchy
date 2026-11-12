@@ -8,7 +8,9 @@
 
 ## Your task
 
-Apply my personal Omarchy preferences to this computer. They give Omarchy the keybindings and defaults I'm used to from CybexOS. Apply every step below, validate, then report what changed, what you skipped and why.
+Apply my personal Omarchy preferences to this computer. They give Omarchy the keybindings and defaults I'm used to from CybexOS. Apply the steps below, validate, then report what changed, what you skipped and why.
+
+This document runs on fresh computers and again on computers that already have an earlier version. Start with "First run or update" to work out which steps to apply.
 
 Each step names a file in the `files/` folder next to this document. Use those files as they are and don't retype their contents. If the folder is missing, stop and ask me for it.
 
@@ -18,11 +20,27 @@ Written against Omarchy 4.5.0-3 and Hyprland 0.56.2, which use Lua config (`~/.c
 
 1. If an `omarchy` skill is available, load it first.
 2. Never edit anything in `/usr/share/omarchy/`. Reading it is fine. All changes go in user config.
-3. Back up every file before changing it: `cp -p FILE FILE.bak.$(date +%s)`.
+3. Back up every file before changing it: `cp -p FILE FILE.bak.$(date +%s)`. Don't back up files you leave unchanged. Back up plugin folders from `~/.config/omarchy/plugins/` to `~/.local/state/omarchy-settings/backups/` instead, so Omarchy doesn't find a second copy of the plugin.
 4. Run `omarchy version` first. If Hyprland config here isn't Lua, stop and ask me before translating anything.
-5. Run `omarchy menu keybindings --print` first. If a key under "New keys" below is already taken by something I added on this computer, ask me before replacing it.
+5. Run `omarchy menu keybindings --print` first. If a key under "New keys" below is already taken by something I added on this computer, ask me before replacing it. Keys inside an earlier `omarchy-settings` block don't count. They're from this document.
 6. Don't run anything from the CybexOS repo. It's NixOS-based, and its `cybexos-*` commands don't exist on Omarchy.
-7. Files ending in `.append`, `.append.lua` or `.append.fish` get added to the end of the target file. First check whether their block is already there, so nothing is added twice. Don't overwrite personal settings already in those files.
+7. Files ending in `.append`, `.append.lua` or `.append.fish` are managed blocks. They start with a `BEGIN omarchy-settings: <name>` line and end with an `END omarchy-settings: <name>` line.
+   - If the target file already has that marked block, replace it from BEGIN to END with the current file.
+   - If it has an older copy without markers, from before they existed, replace that copy with the marked block. `git log -p -- files/<name>` shows what earlier versions looked like.
+   - Otherwise, add the block to the end of the file.
+   Never add a block twice, and don't change personal settings outside the block.
+8. Make every step safe to repeat. Before copying a file or folder, compare it with the target and skip it if they already match. Before installing, enabling, moving or switching something, check whether it's already done.
+
+## First run or update
+
+Each run is recorded in `~/.local/state/omarchy-settings/applied`. The first line is the commit of this repo that was applied. Any lines after it name items that were skipped.
+
+Get the current commit with `git -C <this repo> rev-parse HEAD`, then:
+
+- **No record file:** do a full run of every step. Settings may already be partly in place from before records existed, so rules 7 and 8 matter here.
+- **Record matches HEAD, with no skipped items:** tell me everything is up to date and stop.
+- **Record is older:** read `git log --reverse --format='%h %s' <old>..HEAD` and `git diff <old>..HEAD -- Omarchy-Settings.md files/`. Apply only the steps whose instructions or files changed, and retry the skipped items. If the diff removes something, such as a keybinding, plugin or alias, remove it from this computer too. Then run Step 9 in full.
+- **Recorded commit is missing** (`git cat-file -e <old>^{commit}` fails, for example after a history rewrite): do a full run.
 
 ## Step 1: Install packages
 
@@ -229,6 +247,10 @@ To look at the lock screen without locking, run `omarchy-shell lock preview`, th
 
 If `hyprctl configerrors` reports anything, fix it and validate again. foot changes only show in new windows.
 
+## Step 10: Record the run
+
+Once validation passes, write the commit you applied to `~/.local/state/omarchy-settings/applied` (create the directory if needed). Put the commit on the first line. Below it, put one line for each item you skipped or I declined, so the next run tries it again. If an item can never apply on this computer, such as F9 without Superwhisper, leave it out of the file, but include it in the report.
+
 ## Do not apply
 
 Don't add these, even if they look useful:
@@ -259,12 +281,15 @@ Not yet decided or done:
 
 When you finish, tell me:
 
+- Whether this was a full run or an update, and from which commit to which
 - Which steps were applied, and any you adapted (such as the F9 fallback)
 - Any keys you replaced, and what they did before
 - The path of each backup file
 - Anything you couldn't validate
 
 ## Changelog
+
+- **2026-11-12:** You can now paste the prompt again to update a computer. Each run records the applied commit, and later runs apply only what changed since then. Append files now have BEGIN/END markers, so a changed block replaces the old one instead of being added again. Added Step 10.
 
 - **2026-11-11:** My Model Usage widget replaces Omarchy's Agents widget in the bar (Step 7).
 - **2026-11-11:** Added the CybexOS lock screen password field through theme colours, with an overlay for Tokyo Night (Step 8). Validate is now Step 9.
