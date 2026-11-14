@@ -1,0 +1,9 @@
+[tooltip]
+# CybexOS: tooltips on the menu surface with no outline.
+# Replaces the whole [tooltip] section for this theme only.
+background       = "#26241f"
+background-alpha = 0.97
+text             = "#f2f0ea"
+border           = "hyprland.active-border-foreground"
+border-alpha     = 0.0
+border-width     = 0

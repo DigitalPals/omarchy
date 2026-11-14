@@ -39,7 +39,7 @@ Get the current commit with `git -C <this repo> rev-parse HEAD`, then:
 
 - **No record file:** do a full run of every step. Settings may already be partly in place from before records existed, so rules 7 and 8 matter here.
 - **Record matches HEAD, with no skipped items:** tell me everything is up to date and stop.
-- **Record is older:** read `git log --reverse --format='%h %s' <old>..HEAD` and `git diff <old>..HEAD -- Omarchy-Settings.md files/`. Apply only the steps whose instructions or files changed, and retry the skipped items. If the diff removes something, such as a keybinding, plugin or alias, remove it from this computer too. Then run Step 9 in full.
+- **Record is older:** read `git log --reverse --format='%h %s' <old>..HEAD` and `git diff <old>..HEAD -- Omarchy-Settings.md files/`. Apply only the steps whose instructions or files changed, and retry the skipped items. If the diff removes something, such as a keybinding, plugin or alias, remove it from this computer too. Then run Step 10 in full.
 - **Recorded commit is missing** (`git cat-file -e <old>^{commit}` fails, for example after a history rewrite): do a full run.
 
 ## Step 1: Install packages
@@ -216,7 +216,25 @@ Then run `omarchy theme refresh`. If any other theme in `/usr/share/omarchy/them
 
 Known limits: there's no clock or date, the field keeps Omarchy's size (381×67 instead of 300×54), the wallpaper isn't dimmed, the outline doesn't turn accent while the password is checked, and the corner radius follows Hyprland's `rounding`. Those need changes to Omarchy's lock plugin (see Open items).
 
-## Step 9: Validate
+## Step 9: CybexOS theme
+
+This adds a CybexOS theme to Omarchy's theme list: the warm near-black CybexOS palette with its blue accent and terminal colours, the CybexOS moon and mountains wallpaper, and Yaru Blue icons. Its bar flyouts, notifications, tooltips, menus and launcher sit on CybexOS's slightly raised surfaces with no outline. That only applies while this theme is active. Other themes keep Omarchy's look.
+
+Copy the folder below to `~/.config/omarchy/themes/cybexos/`, so the target ends up with exactly the same files. Remove files there that the folder no longer has. If the target exists and differs, back it up to `~/.local/state/omarchy-settings/backups/` first, not next to it, because Omarchy would list a backup inside `themes/` as a second theme.
+
+**File:** `files/theme-cybexos/`
+
+Then apply it:
+
+- **Theme newly installed** (the target folder didn't exist): run `omarchy theme set cybexos`.
+- **Theme was already installed and is the current one** (`omarchy theme current` prints `Cybexos`): run `omarchy theme refresh` to pick up the changed files.
+- **Theme was already installed but I use another one:** leave my choice alone and don't switch.
+
+Don't add a `shell.lock.toml` or `shell.bar.toml` to the theme. A theme's own file wins over the templates from Steps 7 and 8, so the bar size and the CybexOS password field would be lost.
+
+Known limits: CybexOS normally takes its accent from the wallpaper, and this theme uses the fixed palette it falls back to. The terminal cursor stays the text colour, because Omarchy derives it and has no key for CybexOS's blue one. Omarchy shows the name as "Cybexos". There's no light variant yet.
+
+## Step 10: Validate
 
 Run this with bash, because the `for` loop isn't valid fish.
 
@@ -241,13 +259,17 @@ hyprctl monitors -j | jq -c '.[].reserved'    # expect [0,33,0,0] for each monit
 omarchy plugin list | grep -E 'john.workspaces|omarchy.workspaces'  # expect john.workspaces enabled, omarchy.workspaces disabled
 omarchy plugin list | grep -E 'digitalpals.model-usage|omarchy.agents'  # expect model-usage enabled, agents disabled
 awk '/^\[lock\]/{p=1;next} /^\[/{p=0} p' ~/.local/state/omarchy/current/theme/shell.toml | grep -E '^(background-alpha|border-width) '  # expect 0.85 and 2
+diff -r files/theme-cybexos ~/.config/omarchy/themes/cybexos && echo same  # expect same (run from this repo)
+omarchy theme current                         # Cybexos, unless I chose another theme
+# Only while Cybexos is current:
+awk '/^\[/{s=""} /^\[(popups|notifications|menu)\]/{s=$0} s && /^border-width/{print s, $0}' ~/.local/state/omarchy/current/theme/shell.toml  # expect border-width 0 for all three
 ```
 
 To look at the lock screen without locking, run `omarchy-shell lock preview`, then `omarchy-shell lock hidePreview` (or click it).
 
 If `hyprctl configerrors` reports anything, fix it and validate again. foot changes only show in new windows.
 
-## Step 10: Record the run
+## Step 11: Record the run
 
 Once validation passes, write the commit you applied to `~/.local/state/omarchy-settings/applied` (create the directory if needed). Put the commit on the first line. Below it, put one line for each item you skipped or I declined, so the next run tries it again. If an item can never apply on this computer, such as F9 without Superwhisper, leave it out of the file, but include it in the report.
 
@@ -288,6 +310,8 @@ When you finish, tell me:
 - Anything you couldn't validate
 
 ## Changelog
+
+- **2026-11-14:** Added a CybexOS theme with its colours, wallpaper and Yaru Blue icons, and outline-free popups, notifications and menus while it's active (Step 9). Validate is now Step 10 and Record is Step 11.
 
 - **2026-11-12:** You can now paste the prompt again to update a computer. Each run records the applied commit, and later runs apply only what changed since then. Append files now have BEGIN/END markers, so a changed block replaces the old one instead of being added again. Added Step 10.
 

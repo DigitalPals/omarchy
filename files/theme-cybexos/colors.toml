@@ -1,0 +1,39 @@
+# CybexOS: the fixed dark palette of the CybexOS shell (Common/Theme.qml) and
+# its terminal colours (desktop/defaults/foot.ini). CybexOS normally takes its
+# accent from the wallpaper; these are the colours it falls back to.
+mode = "dark"
+
+accent = "#60a5fa"
+# The terminal cursor stays the foreground colour: Omarchy derives it and
+# offers no key for the CybexOS blue one.
+selection = "#3d5c82"
+selection_foreground = "#ffffff"
+muted = "#706f6b"
+
+# Shell background, popover surface (darkPopBg) and menu surface (darkMenuBg).
+# The two darker shades aren't in CybexOS; they continue the same warm grey.
+background = "#1a1917"
+dark_background = "#141311"
+darker_background = "#0f0e0d"
+lighter_background = "#26241f"
+
+foreground = "#f2f0ea"
+dark_foreground = "#706f6b"
+light_foreground = "#b3afa4"
+bright_foreground = "#f2f0ea"
+
+red = "#e8837a"
+yellow = "#d3b47e"
+orange = "#ffc26e"
+green = "#a3c98f"
+cyan = "#6ec2b2"
+blue = "#9ecbeb"
+magenta = "#c0a8dc"
+brown = "#8a6d4f"
+
+bright_red = "#ffb3ab"
+bright_yellow = "#e5cb98"
+bright_green = "#b8dba5"
+bright_cyan = "#8fd8ca"
+bright_blue = "#b6dcf6"
+bright_magenta = "#d4c0ec"

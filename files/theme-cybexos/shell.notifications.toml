@@ -1,0 +1,10 @@
+[notifications]
+# CybexOS: notifications sit on the raised popover surface with no outline.
+# Replaces the whole [notifications] section for this theme only.
+background       = "#201e1b"
+background-alpha = 1.0
+text             = "#f2f0ea"
+border           = "hyprland.active-border"
+border-alpha     = 0.0
+border-width     = 0
+countdown        = "#60a5fa"

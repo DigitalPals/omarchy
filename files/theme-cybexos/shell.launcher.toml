@@ -1,0 +1,16 @@
+[launcher]
+# CybexOS: the card sits on the raised popover surface with no outline.
+# Replaces the whole [launcher] section for this theme only.
+background                = "#201e1b"
+background-alpha          = 0.95
+text                      = "#f2f0ea"
+border                    = "hyprland.active-border-foreground"
+border-alpha              = 0.0
+border-width              = 0
+scrim                     = "#1a1917"
+scrim-alpha               = 0.5
+selected-background       = "#f2f0ea"
+selected-background-alpha = 0.08
+selected-text             = "#60a5fa"
+selected-border           = "hyprland.active-border-foreground"
+selected-border-alpha     = 0.25
