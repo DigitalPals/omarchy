@@ -23,7 +23,7 @@ To update later, paste the same line again. Each run records which commit it app
 ## What it changes
 
 - **Keybindings:** CybexOS-style keys, including Super+W for WhatsApp, Super+S for Spotify, Super+L to lock and Super+F to float a window. Super+Q still closes windows.
-- **Menubar:** a 33 px bar with hug corners, a workspace indicator with a sliding accent chip, and the [Model Usage](https://github.com/DigitalPals/omarchy-modelusage) widget in place of Omarchy's Agents widget. Menus, panels and notifications get about 8% larger text.
+- **Menubar:** a 33 px bar with hug corners, a workspace indicator with a sliding accent chip, the [Wallarchy](https://github.com/perminder-klair/wallarchy) Wallhaven browser next to it, and the [Model Usage](https://github.com/DigitalPals/omarchy-modelusage) widget in place of Omarchy's Agents widget. Menus, panels and notifications get about 8% larger text.
 - **Lock screen:** the CybexOS password field, with a dark surface and a thin neutral outline. It's done with theme colours only, so there's no clock or date yet.
 - **Theme:** a CybexOS theme with its warm dark colours, blue accent, moon and mountains wallpaper, and outline-free popups and notifications. Switch with `omarchy theme set cybexos`; other themes keep Omarchy's look.
 - **Look and behaviour:** 16 px rounded corners, no window borders, no focus stealing, and a slide animation between workspaces.

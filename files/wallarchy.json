@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "query": "",
+  "categories": "100",
+  "purity": "100",
+  "sorting": "views",
+  "topRange": "1M",
+  "atleast": "1920x1080",
+  "ratios": "",
+  "rotateMinutes": 0,
+  "downloadDir": "",
+  "keepLast": 20
+}

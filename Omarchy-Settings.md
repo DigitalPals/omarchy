@@ -196,6 +196,19 @@ omarchy plugin disable omarchy.agents
 
 `omarchy plugin disable` takes Agents off the bar and keeps it off. Agents is only a bar widget, so nothing else stops. Don't install anything extra for Model Usage. Its optional Fusebox live activity needs Python `websockets`, and without it the widget just shows live activity as unavailable. Don't copy provider, proxy or key settings from another computer. I set those up in the widget's own settings.
 
+**Wallarchy:** a bar button that browses [Wallhaven](https://wallhaven.cc) wallpapers ([perminder-klair/wallarchy](https://github.com/perminder-klair/wallarchy)). Left click opens the browser, middle click applies a random wallpaper and right click toggles rotation. It sits on the left, right after the workspace indicator. If `omarchy plugin list` already shows `co.klair.wallarchy`, skip the `add`, and only run `omarchy plugin enable co.klair.wallarchy` if it shows as disabled. Otherwise add it from git. In both cases, put it in place afterwards:
+
+```bash
+omarchy plugin add https://github.com/perminder-klair/wallarchy.git --enable --yes
+omarchy bar move co.klair.wallarchy --after john.workspaces
+```
+
+Then copy my filters to `~/.config/omarchy/wallarchy.json`: general category, SFW only, sorted by views, at least 1920×1080, the last 20 downloads kept and rotation off. Back up the target first if it exists and differs, because the browser rewrites this file whenever I change a filter.
+
+**File:** `files/wallarchy.json`
+
+It needs `curl`, `jq` and `file`, which stock Omarchy already has, so don't install anything for it. Don't create or copy `~/.config/omarchy/wallarchy.key`. That's a Wallhaven API key, which only NSFW results need, and I haven't asked for it. Downloaded wallpapers go into the current theme's own folder, such as `~/.config/omarchy/backgrounds/cybexos/`, so `omarchy theme bg next` cycles them too.
+
 ## Step 8: Lock screen
 
 This gives Omarchy's lock screen the CybexOS password field: a dark surface at 85% over the blurred wallpaper, a thin neutral 2 px outline instead of the 3 px accent one, muted placeholder text and a red outline after a wrong password. It only uses theme colours, so the lock itself stays Omarchy's. Don't install hyprlock or clone the `omarchy.lock` plugin for this.
@@ -258,6 +271,9 @@ hyprctl layers | grep -c john-hug-corners     # expect two per monitor; can take
 hyprctl monitors -j | jq -c '.[].reserved'    # expect [0,33,0,0] for each monitor
 omarchy plugin list | grep -E 'john.workspaces|omarchy.workspaces'  # expect john.workspaces enabled, omarchy.workspaces disabled
 omarchy plugin list | grep -E 'digitalpals.model-usage|omarchy.agents'  # expect model-usage enabled, agents disabled
+omarchy plugin list | grep co.klair.wallarchy  # expect enabled
+jq -c '.bar.layout.left | map(.id)' ~/.config/omarchy/shell.json  # expect co.klair.wallarchy right after john.workspaces
+cmp files/wallarchy.json ~/.config/omarchy/wallarchy.json && echo same  # expect same (run from this repo)
 awk '/^\[lock\]/{p=1;next} /^\[/{p=0} p' ~/.local/state/omarchy/current/theme/shell.toml | grep -E '^(background-alpha|border-width) '  # expect 0.85 and 2
 diff -r files/theme-cybexos ~/.config/omarchy/themes/cybexos && echo same  # expect same (run from this repo)
 omarchy theme current                         # Cybexos, unless I chose another theme
@@ -311,6 +327,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-14:** Added the Wallarchy Wallhaven browser to the bar, after the workspace indicator, with my filters (Step 7).
 - **2026-11-14:** Added a CybexOS theme with its colours, wallpaper and Yaru Blue icons, and outline-free popups, notifications and menus while it's active (Step 9). Validate is now Step 10 and Record is Step 11.
 
 - **2026-11-12:** You can now paste the prompt again to update a computer. Each run records the applied commit, and later runs apply only what changed since then. Append files now have BEGIN/END markers, so a changed block replaces the old one instead of being added again. Added Step 10.
