@@ -231,7 +231,7 @@ Known limits: there's no clock or date, the field keeps Omarchy's size (381×67 
 
 ## Step 9: CybexOS theme
 
-This adds a CybexOS theme to Omarchy's theme list: the warm near-black CybexOS palette with its blue accent and terminal colours, the CybexOS moon and mountains wallpaper, and Yaru Blue icons. Its bar flyouts, notifications, tooltips, menus and launcher sit on CybexOS's slightly raised surfaces with no outline. That only applies while this theme is active. Other themes keep Omarchy's look.
+This adds a CybexOS theme to Omarchy's theme list: the warm near-black CybexOS palette with its blue accent and terminal colours, the CybexOS moon and mountains wallpaper, and Yaru Blue icons. Its bar flyouts, notifications, tooltips, menus and launcher sit on CybexOS's slightly raised surfaces with no outline. Chromium keeps the colour of Omarchy's default Tokyo Night theme (`#1a1b26`). Omarchy would otherwise hand it the warm CybexOS background, which Chromium turns into yellow accents. That only applies while this theme is active. Other themes keep Omarchy's look.
 
 Copy the folder below to `~/.config/omarchy/themes/cybexos/`, so the target ends up with exactly the same files. Remove files there that the folder no longer has. If the target exists and differs, back it up to `~/.local/state/omarchy-settings/backups/` first, not next to it, because Omarchy would list a backup inside `themes/` as a second theme.
 
@@ -327,6 +327,7 @@ When you finish, tell me:
 
 ## Changelog
 
+- **2026-11-14:** The CybexOS theme gives Chromium the same colours as Omarchy's default Tokyo Night theme, instead of yellow accents (Step 9).
 - **2026-11-14:** Added the Wallarchy Wallhaven browser to the bar, after the workspace indicator, with my filters (Step 7).
 - **2026-11-14:** Added a CybexOS theme with its colours, wallpaper and Yaru Blue icons, and outline-free popups, notifications and menus while it's active (Step 9). Validate is now Step 10 and Record is Step 11.
 
